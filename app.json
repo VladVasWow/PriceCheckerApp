@@ -1,27 +1,42 @@
 {
   "expo": {
-    "name": "PriceCheckerApp",
+    "name": "Прайс Чекер ВЕНА",
     "slug": "PriceCheckerApp",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "version": "1.1.7",
+    "orientation": "landscape",
+    "icon": "./assets/icon-2.png",
     "userInterfaceStyle": "light",
+    "androidNavigationBar": {
+      "visible": "immersive",
+      "backgroundColor": "#000000"
+    },
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#002e62"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "foregroundImage": "./assets/icon-2.png"
+      },
+      "package": "com.vladwow.PriceCheckerApp"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon-2.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a456e62e-f1d2-49d8-ad0f-ff936b7d0320"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/a456e62e-f1d2-49d8-ad0f-ff936b7d0320"
     }
   }
 }
