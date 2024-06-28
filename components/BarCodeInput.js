@@ -38,7 +38,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         marginTop: 10,
         marginRight: 10,
-        borderColor: MAIN_COLOR,
     },
     input: {
         marginRight: 5,

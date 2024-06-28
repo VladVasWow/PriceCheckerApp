@@ -59,6 +59,7 @@ const ConnectParamsScreen = ({ setConnectParams }) => {
                     style={styles.input}
                     onChangeText={text => setLogin(text)}
                     value={login}
+                    placeholder="ім'я користувача"
                 />
                 <Text style={styles.label}>Пароль:</Text>
                 <TextInput
@@ -67,6 +68,7 @@ const ConnectParamsScreen = ({ setConnectParams }) => {
                     onChangeText={text => setPassword(text)}
                     value={password}
                     secureTextEntry={true}
+                    placeholder="пароль користувача"
                 />
                 <Text style={styles.label}>Строка підключення:</Text>
                 <TextInput
