@@ -16,9 +16,12 @@
       "backgroundColor": "#002e62"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "userInterfaceStyle": "light"
     },
     "android": {
+      "versionCode": 3,
+      "userInterfaceStyle": "light",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon-2.png"
       },

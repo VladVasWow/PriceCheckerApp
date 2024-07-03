@@ -32,7 +32,7 @@ const AdvertisementCarouselItem = ({ item, connectParams }) => {
 
 const styles = StyleSheet.create({
   itemContainer: {
-    backgroundColor: 'white',
+    backgroundColor: WHITE_COLOR,
     borderRadius: 15,
     height: '95%',
     padding: 0,
@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
     elevation: 20,
   },
   imageContainer: {
+    backgroundColor: WHITE_COLOR,
     width: '100%',
     height: '85%',
   },

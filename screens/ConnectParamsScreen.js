@@ -3,7 +3,9 @@ import { View, Text, TextInput, StyleSheet, Switch, TouchableOpacity } from 'rea
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { postQuery1C } from '../tools/workWith1C';
 import { MAIN_COLOR, SECONDARY_COLOR, WHITE_COLOR } from '../tools/consts';
-import {expo} from '../app.json'
+import * as Device from 'expo-device';
+import { expo } from '../app.json'
+import { getDeviceTypeString } from '../tools/format';
 
 const ConnectParamsScreen = ({ setConnectParams }) => {
     const [login, setLogin] = useState('');
@@ -12,6 +14,7 @@ const ConnectParamsScreen = ({ setConnectParams }) => {
     const [isUseScaner, setIsUseScaner] = useState(true);
     const [error, setError] = useState(null);
     const [isСonnecting, setIsСonnecting] = useState(false);
+    const [deviceInfo, setDeviceInfo] = useState("");
 
     const handleLogin = async () => {
         // Зберігаємо логін і строку підключення в локальному сховищі
@@ -37,6 +40,12 @@ const ConnectParamsScreen = ({ setConnectParams }) => {
 
     // Під час завантаження компонента, отримуємо збережені дані з локального сховища
     useEffect(() => {
+
+        const fetchDeviceType = async () => {
+            const type = await Device.getDeviceTypeAsync();
+            setDeviceInfo(getDeviceTypeString(type)+' '+ Device.manufacturer + ' ' + Device.modelName);
+        }
+
         AsyncStorage.getItem('connectParams')
             .then(storageString => storageString ? JSON.parse(storageString) : "")
             .then(connectParams => {
@@ -48,12 +57,13 @@ const ConnectParamsScreen = ({ setConnectParams }) => {
                     setIsUseScaner(connectParams.isUseScaner);
                 }
             })
+        fetchDeviceType();
     }, []);
 
     return (
         <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-                <Text style={{ color: MAIN_COLOR, textAlign: 'right' }}>v.{expo.version}</Text>
+                <Text style={{ color: MAIN_COLOR, textAlign: 'right' }}>{deviceInfo}. App v.{expo.version}</Text>
                 <Text style={styles.label}>Логін:</Text>
                 <TextInput
                     style={styles.input}

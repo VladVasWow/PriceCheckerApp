@@ -1,3 +1,5 @@
+import * as Device from 'expo-device';
+
 export const getCurrentFormattedDate = () => {
     const date = new Date();
     return dateToString(date, true);
@@ -22,8 +24,15 @@ export const dateToString = (date, withoutSeparators = false) => {
     }
     else {
         return `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
-
     }
+}
+
+export const dateReviver = (key, value) => {
+    const dateFormat = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/;
+    if (typeof value === "string" && dateFormat.test(value)) {
+        return new Date(value);
+    }
+    return value;
 }
 
 export const blobToBase64 = async (blob) => {
@@ -47,3 +56,19 @@ export const shuffleArray = (array) => {
         .sort((a, b) => a.sort - b.sort)
         .map(({ value }) => value);
 };
+
+export const getDeviceTypeString = (type) => {
+    switch (type) {
+        case Device.DeviceType.PHONE:
+            return 'Phone';
+        case Device.DeviceType.TABLET:
+            return 'Tablet';
+        case Device.DeviceType.DESKTOP:
+            return 'Desktop';
+        case Device.DeviceType.TV:
+            return 'TV';
+        case Device.DeviceType.UNKNOWN:
+        default:
+            return 'Unknown';
+    }
+}
