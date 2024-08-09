@@ -9,7 +9,7 @@ const CountMassage = ({ scanCountData, setScanCountData, setShowScanCount }) => 
     useEffect(() => {
         const timer = setTimeout(() => {
             setShowScanCount(false)
-        }, 100000);
+        }, 10000);
         return () => clearTimeout(timer);
     }, []);
 

@@ -1,6 +1,8 @@
 import { Dimensions } from 'react-native';
 
-export const EMPTY_LINK_ID = "00000000-0000-0000-0000-000000000000"
+export const EMPTY_LINK_ID = "00000000-0000-0000-0000-000000000000";
+
+export const IMAGE_STORAGE = 'http://img.vena.com.ua/web-storage/pict/';
 
 export const MAIN_COLOR = '#002e62';
 export const SECONDARY_COLOR = '#e8eff7';

@@ -22,7 +22,7 @@ const ProductItem = ({ connectParams, product, setProduct }) => {
                 >{product.name}</Text>
             </View>
             <View style={styles.containerInfo}>
-                <ProductImageFast connectParams={connectParams} imageID={product.imageID}></ProductImageFast>
+                <ProductImageFast connectParams={connectParams} imageID={product.imageID} imageFormat={product.imageFormat}></ProductImageFast>
                 <ProductDetails product={product}></ProductDetails>
             </View>
         </View>

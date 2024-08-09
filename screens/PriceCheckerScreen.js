@@ -56,8 +56,10 @@ const PriceCheckerScreen = ({ connectParams }) => {
     }
     // якщо проскановано QR з текстом EMPTY_LINK_ID то покажему кількість сканувань
     if (barCode === EMPTY_LINK_ID) {
-      setShowScanCount(true);
+      setProduct(undefined);
       setBarCode("");
+      setError("");
+      setShowScanCount(true);
     }
     else if (barCode) {
       getProduct()
@@ -84,7 +86,7 @@ const PriceCheckerScreen = ({ connectParams }) => {
             <CountMassage scanCountData={scanCountData} setScanCountData={setScanCountData} setShowScanCount={setShowScanCount}>
             </CountMassage>
             :
-            <AdvertisementCarousel connectParams={connectParams}>
+            <AdvertisementCarousel connectParams={connectParams} setError={setError}>
             </AdvertisementCarousel>
       }
     </View>

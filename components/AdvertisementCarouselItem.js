@@ -12,7 +12,7 @@ const AdvertisementCarouselItem = ({ item, connectParams }) => {
     <View style={styles.itemContainer}>
       <View style={styles.imageContainer}>
         <View style={styles.image}>
-          <ProductImageFast connectParams={connectParams} imageID={item.imageID} ></ProductImageFast>
+          <ProductImageFast connectParams={connectParams} imageID={item.imageID} imageFormat={item.imageFormat}></ProductImageFast>
         </View>
         <View style={styles.priceUnitContainer}>
           <View style={styles.priceContainer}>

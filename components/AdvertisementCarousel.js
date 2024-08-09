@@ -8,60 +8,65 @@ import { shuffleArray } from '../tools/format';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const AdvertisementCarousel = ({ connectParams }) => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+const AdvertisementCarousel = ({ connectParams, setError }) => {
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-  async function getProducts() {
-    setLoading(true);
-    result = await postQuery1C.getAdvertisements(connectParams);
-    console.log("Advertisements =", result.product.length)
-    setProducts(shuffleArray(result.product));
-    setLoading(false);
-  }
-
-  useEffect(() => {
-    getProducts();
-  }, []);
-
-  const handleSnapToItem = (index) => {
-    if (index === 0) {
-        getProducts();
+    async function getProducts() {
+        setLoading(true);
+        result = await postQuery1C.getAdvertisements(connectParams);
+        if (result.success) {
+            console.log("Advertisements =", result.product.length)
+            setProducts(shuffleArray(result.product));
+        } else {
+            setError(result.error);
+        }
+        setLoading(false);
     }
-  };
 
-  if (loading) {
-    return <ActivityIndicator size="large" color={MAIN_COLOR} />;
-  }
+    useEffect(() => {
+        getProducts();
+    }, []);
 
-  const renderItem = ({ item }) => (
-    <AdvertisementCarouselItem item={item} connectParams={connectParams} />
-  );
+    const handleSnapToItem = (index) => {
+        if (index === 0) {
+            getProducts();
+        }
+    };
 
-  return (
-    <View style={styles.carouselContainer}>
-      <Carousel
-        connectParams={connectParams}
-        data={products}
-        renderItem={renderItem}
-        sliderWidth={screenWidth}
-        itemWidth={screenWidth * 0.65}
-        layout="default"
-        loop={false}
-        autoplay={true}
-        autoplayInterval={4000}
-        onSnapToItem={handleSnapToItem}
-      />
-    </View>
-  );
+    if (loading) {
+        return <ActivityIndicator style={styles.carouselContainer} size="large" color={MAIN_COLOR} />;
+    }
+
+    const renderItem = ({ item }) => (
+        <AdvertisementCarouselItem item={item} connectParams={connectParams} />
+    );
+
+    return (
+        <View style={styles.carouselContainer}>
+            <Carousel
+                connectParams={connectParams}
+                data={products}
+                renderItem={renderItem}
+                sliderWidth={screenWidth}
+                itemWidth={screenWidth * 0.65}
+                layout="default"
+                loop={false}
+                autoplay={true}
+                autoplayInterval={4000}
+                onSnapToItem={handleSnapToItem}
+            />
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
-  carouselContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+    carouselContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
 
 });
 
