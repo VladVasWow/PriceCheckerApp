@@ -10,6 +10,7 @@ import ProductItem from "../components/ProductItem";
 import ErrorMassage from "../components/ErrorMassage";
 import CountMassage from "../components/CountMassage";
 import { dateReviver } from "../tools/format";
+import * as ExpoZebraScanner from 'expo-zebra-scanner';
 
 const PriceCheckerScreen = ({ connectParams }) => {
   const [product, setProduct] = useState(undefined);
@@ -18,13 +19,27 @@ const PriceCheckerScreen = ({ connectParams }) => {
   const [showScanCount, setShowScanCount] = useState(false);
   const [scanCountData, setScanCountData] = useState({ dataFrom: "", scanCount: 0 });
 
-  // Під час завантаження компонента, отримуємо збережені дані з локального сховища про кількість сканувань
   useEffect(() => {
+    // Під час завантаження компонента, отримуємо збережені дані з локального сховища про кількість сканувань
     AsyncStorage.getItem('scanCountData')
       .then(storageString => storageString ? JSON.parse(storageString, dateReviver) : { dataFrom: new Date(), scanCount: 0 })
       .then(storageData => {
         setScanCountData(storageData);
       })
+
+    // Підключаємо listener для отримання подій від сканера Zebra  
+    const listener = ExpoZebraScanner.addListener(event => {
+      setBarCode(event.scanData);
+      console.log(event);
+      });
+        
+    ExpoZebraScanner.startScan();      
+
+    return () => {
+      ExpoZebraScanner.stopScan();
+      listener?.remove();
+    };
+
   }, []);
 
   // збільшемо лічильник сканувань на 1 
@@ -69,7 +84,8 @@ const PriceCheckerScreen = ({ connectParams }) => {
   return (
     <View style={styles.container}>
       {connectParams.isUseScaner ?
-        <BarCodeInputHidden setBarCode={setBarCode}></BarCodeInputHidden>
+        //<BarCodeInputHidden setBarCode={setBarCode}></BarCodeInputHidden>
+        <></>
         :
         <BarcodeInput setBarCode={setBarCode}></BarcodeInput>
       }
