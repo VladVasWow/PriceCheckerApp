@@ -6,6 +6,7 @@ import { MAIN_COLOR, SECONDARY_COLOR, WHITE_COLOR } from '../tools/consts';
 import * as Device from 'expo-device';
 import { expo } from '../app.json'
 import { getDeviceTypeString } from '../tools/format';
+import { createBasicDatawedgeProfile } from '../tools/zebra';
 
 const ConnectParamsScreen = ({ setConnectParams }) => {
     const [login, setLogin] = useState('');
@@ -29,7 +30,11 @@ const ConnectParamsScreen = ({ setConnectParams }) => {
         result = await postQuery1C.testConnect(connectParams);
         if (result.success) {
             AsyncStorage.setItem('connectParams', JSON.stringify(connectParams));
-            setConnectParams(connectParams)
+            setConnectParams(connectParams);
+            if (isUseScaner) {
+                createBasicDatawedgeProfile();
+                console.log("add prifile Datawedge")
+            }    
         }
         else {
             setError(result.error);
