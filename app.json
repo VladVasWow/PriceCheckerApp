@@ -20,7 +20,7 @@
       "userInterfaceStyle": "light"
     },
     "android": {
-      "versionCode": 7,
+      "versionCode": 8,
       "userInterfaceStyle": "light",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon-2.png"
