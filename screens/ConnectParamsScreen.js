@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, Switch, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { postQuery1C } from '../tools/workWith1C';
-import { MAIN_COLOR, SECONDARY_COLOR, WHITE_COLOR } from '../tools/consts';
+import { MAIN_COLOR, MARKET_PLACES, SECONDARY_COLOR, WHITE_COLOR } from '../tools/consts';
 import * as Device from 'expo-device';
 import { expo } from '../app.json'
 import { getDeviceTypeString } from '../tools/format';
 import { createBasicDatawedgeProfile } from '../tools/zebra';
+import MarketPlaceDropDown from '../components/MarketPlaceDropDown';
 
 const ConnectParamsScreen = ({ setConnectParams }) => {
     const [login, setLogin] = useState('');
@@ -16,6 +17,8 @@ const ConnectParamsScreen = ({ setConnectParams }) => {
     const [error, setError] = useState(null);
     const [isСonnecting, setIsСonnecting] = useState(false);
     const [deviceInfo, setDeviceInfo] = useState("");
+    const [marketPlace, setMarketPlace] = useState(null);
+
 
     const handleLogin = async () => {
         // Зберігаємо логін і строку підключення в локальному сховищі
@@ -24,6 +27,7 @@ const ConnectParamsScreen = ({ setConnectParams }) => {
             'password': password,
             'connectionString': connectionString,
             'isUseScaner': isUseScaner,
+            'marketPlace': marketPlace,
         };
         setIsСonnecting(true);
 
@@ -60,6 +64,12 @@ const ConnectParamsScreen = ({ setConnectParams }) => {
                     setPassword(connectParams.password);
                     setConnectionString(connectParams.connectionString);
                     setIsUseScaner(connectParams.isUseScaner);
+                    if (!connectParams.marketPlace) {
+                        setMarketPlace(MARKET_PLACES[0].value);
+                    }
+                    else {
+                        setMarketPlace(connectParams.marketPlace);
+                    }
                 }
             })
         fetchDeviceType();
@@ -69,6 +79,9 @@ const ConnectParamsScreen = ({ setConnectParams }) => {
         <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
                 <Text style={{ color: MAIN_COLOR, textAlign: 'right' }}>{deviceInfo}. App v.{expo.version}</Text>
+                <Text style={styles.label}>Магазин:</Text>
+                <MarketPlaceDropDown value={marketPlace} setValue = {setMarketPlace}
+                />                
                 <Text style={styles.label}>Логін:</Text>
                 <TextInput
                     style={styles.input}

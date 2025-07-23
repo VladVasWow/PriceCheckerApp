@@ -1,10 +1,8 @@
-import { useState } from "react";
 import { Image, StyleSheet, View } from "react-native"
-import { postQuery1C } from "../tools/workWith1C";
 import { EMPTY_LINK_ID, WHITE_COLOR, IMAGE_STORAGE } from "../tools/consts";
 import {Image as CacheImage}  from 'react-native-expo-image-cache';
 
-const ProductImageFast = ({ connectParams, imageID, imageFormat }) => {
+const ProductImageFast = ({ imageID, imageFormat }) => {
     //console.log(`${IMAGE_STORAGE}${imageID}.${imageFormat}`);
     return (
         <View style={styles.container}>

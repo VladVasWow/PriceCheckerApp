@@ -39,7 +39,7 @@ const AdvertisementCarousel = ({ connectParams, setError }) => {
     }
 
     const renderItem = ({ item }) => (
-        <AdvertisementCarouselItem item={item} connectParams={connectParams} />
+        <AdvertisementCarouselItem item={item}/>
     );
 
     return (

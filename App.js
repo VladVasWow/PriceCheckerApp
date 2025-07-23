@@ -4,10 +4,10 @@ import ConnectParamsScreen from './screens/ConnectParamsScreen';
 import { setStatusBarHidden } from "expo-status-bar";
 import * as NavigationBar from "expo-navigation-bar";
 import { AppState, Platform, View } from 'react-native';
-import { SECONDARY_COLOR } from './tools/consts';
+import { EMPTY_LINK_ID, SECONDARY_COLOR } from './tools/consts';
 
 export default function App() {
-  const [connectParams, setConnectParams] = useState(null)
+  const [connectParams, setConnectParams] = useState(null);
 
   const [screenDimensions, setScreenDimensions] = useState({ height: "100%", width: "100%" });
   const { height: screenHeight, width: screenWidth } = screenDimensions;
@@ -36,7 +36,7 @@ export default function App() {
   return (
     <View style={{ height: screenHeight, width: screenWidth, overflow: "hidden", backgroundColor: SECONDARY_COLOR }}>
       {(connectParams ? <PriceCheckerScreen connectParams={connectParams}></PriceCheckerScreen> :
-        <ConnectParamsScreen setConnectParams={setConnectParams}></ConnectParamsScreen>)}
+        <ConnectParamsScreen setConnectParams={setConnectParams} ></ConnectParamsScreen>)}
     </View>
   );
 }

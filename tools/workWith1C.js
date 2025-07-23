@@ -140,7 +140,7 @@ const fetchUser = ({ connectionString, login, password }) => {
 }
 
 
-export const fetchProductByScanCode = ({ connectionString, login, password }, barCode) => {
+export const fetchProductByScanCode = ({ connectionString, login, password, marketPlace }, barCode) => {
     const params = {
         headers: getHeaders(login, password),
         method: 'POST',
@@ -156,14 +156,22 @@ export const fetchProductByScanCode = ({ connectionString, login, password }, ba
                     "Type": "Date",
                     "Name": "currentDate",
                     "Value": getCurrentFormattedDate(),
-                }
+                },
+                {
+                    "Type": "GUID",
+                    "Name": "market",
+                    "TypeMetaData": "Catalogs",
+                    "NameMetaData": "Магазины", 
+                    "Value": marketPlace,
+                },                  
             ]
         })
     }
+    console.log(getCurrentFormattedDate());
     return fetch(conectionStringPostQuery(connectionString), params);
 }
 
-export const fetchAdvertisements = ({ connectionString, login, password }) => {
+export const fetchAdvertisements = ({ connectionString, login, password, marketPlace }) => {
     const params = {
         headers: getHeaders(login, password),
         method: 'POST',
@@ -174,7 +182,14 @@ export const fetchAdvertisements = ({ connectionString, login, password }) => {
                     "Type": "Date",
                     "Name": "currentDate",
                     "Value": getCurrentFormattedDate(),
-                }
+                },
+                {
+                    "Type": "GUID",
+                    "Name": "market",
+                    "TypeMetaData": "Catalogs",
+                    "NameMetaData": "Магазины", 
+                    "Value": marketPlace,//"0cb53088-5204-11e5-9a04-002590efab51"
+                },                   
             ]
         })
     }
