@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { StyleSheet } from 'react-native';
 import { MARKET_PLACES } from '../tools/consts';
 
 
-const MarketPlaceDropDown = ({ value, setValue }) => {
+const MarketPlaceDropDown = ({ value, setValue, onPress}) => {
     const [items, setItems] = useState(MARKET_PLACES);
     const [open, setOpen] = useState(false);
 
@@ -18,6 +18,7 @@ const MarketPlaceDropDown = ({ value, setValue }) => {
             setItems={setItems}
             open={open}
             setOpen={setOpen}
+            onPress={onPress}
         />
     );
 };

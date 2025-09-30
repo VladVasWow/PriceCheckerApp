@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, StyleSheet, Switch, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { postQuery1C } from '../tools/workWith1C';
@@ -19,93 +19,146 @@ const ConnectParamsScreen = ({ setConnectParams }) => {
     const [deviceInfo, setDeviceInfo] = useState("");
     const [marketPlace, setMarketPlace] = useState(null);
 
+    // для автологіну
+    const [countdown, setCountdown] = useState(null); // null = нема відліку
+    const countdownRef = useRef(null);
+    const savedParamsRef = useRef(null);
 
-    const handleLogin = async () => {
-        // Зберігаємо логін і строку підключення в локальному сховищі
-        const connectParams = {
-            'login': login,
-            'password': password,
-            'connectionString': connectionString,
-            'isUseScaner': isUseScaner,
-            'marketPlace': marketPlace,
+    const stopCountdown = () => {
+        if (countdownRef.current) clearInterval(countdownRef.current);
+        setCountdown(null);
+    };
+
+    const handleLogin = async (overrideParams = null) => {
+        stopCountdown(); // як тільки логін запускається – відлік скидаємо
+
+        const connectParams = overrideParams || {
+            login,
+            password,
+            connectionString,
+            isUseScaner,
+            marketPlace,
         };
+
+        if (!connectParams.login || !connectParams.password || !connectParams.connectionString || !connectParams.marketPlace) {
+            setError("Будь ласка, заповніть усі параметри підключення");
+            return;
+        }
+
         setIsСonnecting(true);
 
-        result = await postQuery1C.testConnect(connectParams);
-        if (result.success) {
-            AsyncStorage.setItem('connectParams', JSON.stringify(connectParams));
-            setConnectParams(connectParams);
-            if (isUseScaner) {
-                createBasicDatawedgeProfile();
-                console.log("add prifile Datawedge")
-            }    
-        }
-        else {
-            setError(result.error);
+        try {
+            const result = await postQuery1C.testConnect(connectParams);
+            if (result.success) {
+                await AsyncStorage.setItem('connectParams', JSON.stringify(connectParams));
+                setConnectParams(connectParams);
+                if (connectParams.isUseScaner) {
+                    createBasicDatawedgeProfile();
+                    console.log("add profile Datawedge")
+                }
+                setError(null);
+            } else {
+                setError(result.error);
+                setConnectParams(null);
+            }
+        } catch (e) {
+            setError("Помилка підключення: " + e.message);
             setConnectParams(null);
         }
+
         setIsСonnecting(false);
     };
 
-    // Під час завантаження компонента, отримуємо збережені дані з локального сховища
+    // при першому завантаженні
     useEffect(() => {
-
         const fetchDeviceType = async () => {
             const type = await Device.getDeviceTypeAsync();
-            setDeviceInfo(getDeviceTypeString(type)+' '+ Device.manufacturer + ' ' + Device.modelName);
-        }
+            setDeviceInfo(getDeviceTypeString(type) + ' ' + Device.manufacturer + ' ' + Device.modelName);
+        };
 
         AsyncStorage.getItem('connectParams')
-            .then(storageString => storageString ? JSON.parse(storageString) : "")
+            .then(storageString => storageString ? JSON.parse(storageString) : null)
             .then(connectParams => {
-                console.log(connectParams);
                 if (connectParams) {
                     setLogin(connectParams.login);
                     setPassword(connectParams.password);
                     setConnectionString(connectParams.connectionString);
                     setIsUseScaner(connectParams.isUseScaner);
-                    if (!connectParams.marketPlace) {
-                        setMarketPlace(MARKET_PLACES[0].value);
-                    }
-                    else {
-                        setMarketPlace(connectParams.marketPlace);
+                    setMarketPlace(connectParams.marketPlace || MARKET_PLACES[0].value);
+
+                    // якщо всі параметри є → стартує відлік
+                    if (
+                        connectParams.login &&
+                        connectParams.password &&
+                        connectParams.connectionString &&
+                        connectParams.marketPlace
+                    ) {
+                        savedParamsRef.current = connectParams;
+                        setCountdown(5);
+                        countdownRef.current = setInterval(() => {
+                            setCountdown(prev => {
+                                if (prev === 1) {
+                                    clearInterval(countdownRef.current);
+                                    handleLogin(connectParams);
+                                    return null;
+                                }
+                                return prev - 1;
+                            });
+                        }, 1000);
                     }
                 }
-            })
+            });
+
         fetchDeviceType();
+
+        return stopCountdown; // очистка при анмаунті
     }, []);
 
     return (
         <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-                <Text style={{ color: MAIN_COLOR, textAlign: 'right' }}>{deviceInfo}. App v.{expo.version}</Text>
+                <Text style={{ color: MAIN_COLOR, textAlign: 'right' }}>
+                    {deviceInfo}. App v.{expo.version}
+                </Text>
+
                 <Text style={styles.label}>Магазин:</Text>
-                <MarketPlaceDropDown value={marketPlace} setValue = {setMarketPlace}
-                />                
+                <MarketPlaceDropDown 
+                    value={marketPlace} 
+                    setValue={setMarketPlace} 
+                    onPress={stopCountdown}
+                />
+
                 <Text style={styles.label}>Логін:</Text>
                 <TextInput
                     style={styles.input}
-                    onChangeText={text => setLogin(text)}
+                    onChangeText={setLogin}
+                    onFocus={stopCountdown}
                     value={login}
                     placeholder="ім'я користувача"
                 />
+
                 <Text style={styles.label}>Пароль:</Text>
                 <TextInput
                     style={styles.input}
                     keyboardType="numeric"
-                    onChangeText={text => setPassword(text)}
+                    onChangeText={setPassword}
+                    onFocus={stopCountdown}
                     value={password}
                     secureTextEntry={true}
                     placeholder="пароль користувача"
                 />
+
                 <Text style={styles.label}>Строка підключення:</Text>
                 <TextInput
                     style={styles.input}
-                    onChangeText={text => setConnectionString(text)}
+                    onChangeText={setConnectionString}
+                    onFocus={stopCountdown}
                     value={connectionString}
                     placeholder="наприклад http://ServerName:80/DataBaseName"
                 />
+
                 {error && <Text style={styles.error}>{error}</Text>}
+
                 <View style={styles.switchContainer}>
                     <Text>Використовувати сканер штрихкодів </Text>
                     <Switch
@@ -113,12 +166,22 @@ const ConnectParamsScreen = ({ setConnectParams }) => {
                         thumbColor={isUseScaner ? MAIN_COLOR : "#f4f3f4"}
                         ios_backgroundColor="#3e3e3e"
                         onValueChange={setIsUseScaner}
+                        onTouchStart={stopCountdown}
                         value={isUseScaner}
                     />
                 </View>
-                <TouchableOpacity onPress={handleLogin} style={styles.enterButtom}>
+
+                <TouchableOpacity
+                    onPress={() => handleLogin()}
+                    style={[styles.enterButtom, isСonnecting && { opacity: 0.5 }]}
+                    disabled={isСonnecting}
+                >
                     <Text style={{ color: WHITE_COLOR, textAlign: 'center' }}>
-                        {isСonnecting ? "Підключення..." : "Увійти"}
+                        {isСonnecting
+                            ? "Підключення..."
+                            : countdown !== null
+                                ? `Увійти (${countdown})`
+                                : "Увійти"}
                     </Text>
                 </TouchableOpacity>
             </View>

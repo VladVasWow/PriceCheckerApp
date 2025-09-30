@@ -2,7 +2,7 @@
   "expo": {
     "name": "Прайс Чекер ВЕНА",
     "slug": "PriceCheckerApp",
-    "version": "1.3.0",
+    "version": "1.3.1",
     "orientation": "landscape",
     "icon": "./assets/icon-2.png",
     "userInterfaceStyle": "light",
@@ -20,7 +20,7 @@
       "userInterfaceStyle": "light"
     },
     "android": {
-      "versionCode": 10,
+      "versionCode": 11,
       "userInterfaceStyle": "light",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon-2.png"

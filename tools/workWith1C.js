@@ -73,7 +73,7 @@ async function testConnect(connectParams) {
     try {
         const response = await fetchUser(connectParams);
         if (!response.ok) {
-            return { success: false, error: `Невірні дані(логін/пароль) (${response.status})` }
+            return { success: false, error: `Невірні параметри підключення(логін/пароль/шлях) (${response.status})` }
         }
         const data = await response.json();
         return { success: true, user: data.Result[0] }
