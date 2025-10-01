@@ -4,7 +4,7 @@ import ConnectParamsScreen from './screens/ConnectParamsScreen';
 import { setStatusBarHidden } from "expo-status-bar";
 import * as NavigationBar from "expo-navigation-bar";
 import { AppState, Platform, View } from 'react-native';
-import { EMPTY_LINK_ID, SECONDARY_COLOR } from './tools/consts';
+import { SECONDARY_COLOR } from './tools/consts';
 
 export default function App() {
   const [connectParams, setConnectParams] = useState(null);
@@ -19,7 +19,7 @@ export default function App() {
 
       if (Platform.OS === "android") {
         // Make it overlay the screen await 
-        await NavigationBar.setBehaviorAsync("overlay-swipe");
+        //await NavigationBar.setBehaviorAsync("overlay-swipe");
         // Hide it
         await NavigationBar.setVisibilityAsync("hidden")
       }
@@ -27,9 +27,9 @@ export default function App() {
 
     hideStatusBarAndNavigationBar();
 
-    //const appStateEventListener = AppState.addEventListener("change", () => { hideStatusBarAndNavigationBar() });
+    const appStateEventListener = AppState.addEventListener("change", () => { hideStatusBarAndNavigationBar() });
 
-    //return () => { AppState.removeEventListener("change", appStateEventListener); }
+    return () => { AppState.removeEventListener("change", appStateEventListener); }
 
   }, [])
 

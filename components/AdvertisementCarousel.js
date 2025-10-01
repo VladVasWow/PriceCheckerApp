@@ -14,7 +14,7 @@ const AdvertisementCarousel = ({ connectParams, setError }) => {
 
     async function getProducts() {
         setLoading(true);
-        result = await postQuery1C.getAdvertisements(connectParams);
+        const result = await postQuery1C.getAdvertisements(connectParams);
         if (result.success) {
             console.log("Advertisements =", result.product.length)
             setProducts(shuffleArray(result.product));

@@ -63,7 +63,7 @@ const PriceCheckerScreen = ({ connectParams }) => {
   // 
   useEffect(() => {
     async function getProduct() {
-      result = await postQuery1C.getProductByBarCode(connectParams, barCode);
+      const result = await postQuery1C.getProductByBarCode(connectParams, barCode);
       setProduct(result.product);
       setError(result.error);
       setBarCode("");

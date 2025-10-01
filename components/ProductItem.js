@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import ProductImageFast from "./ProductImageFast";
+//import ProductImage from "./ProductImage";
 import ProductDetails from "./ProductDetails";
 import { MAIN_COLOR, WHITE_COLOR, verticalScale } from "../tools/consts";
 import { useEffect } from "react";

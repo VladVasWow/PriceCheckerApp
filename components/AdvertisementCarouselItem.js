@@ -1,5 +1,5 @@
 import { Dimensions, StyleSheet, Text, View } from "react-native";
-import ProductImage from "./ProductImage";
+//import ProductImage from "./ProductImage";
 import { ALARM_COLOR, MAIN_COLOR, WHITE_COLOR, verticalScale } from "../tools/consts";
 import ProductImageFast from "./ProductImageFast";
 
