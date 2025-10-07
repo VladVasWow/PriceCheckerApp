@@ -27,10 +27,11 @@ export default function App() {
 
     hideStatusBarAndNavigationBar();
 
-    const appStateEventListener = AppState.addEventListener("change", () => { hideStatusBarAndNavigationBar() });
+    const appStateEventListener = AppState.addEventListener("change", hideStatusBarAndNavigationBar);
 
-    return () => { AppState.removeEventListener("change", appStateEventListener); }
-
+    return () => {
+      appStateEventListener.remove(); // Використовуємо метод remove для відписки
+    };
   }, [])
 
   return (
